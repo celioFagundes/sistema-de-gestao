@@ -14,7 +14,7 @@ app.listen(PORT, (req, res) =>{
 })
 
 mongoose
-  .connect(DB_URI )
+  .connect(DB_URI)
   .then(() => {
     createInitialUsers()
     app.listen(port, () => {
