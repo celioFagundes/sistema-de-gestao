@@ -4,8 +4,9 @@ const index = async (req, res) => {
   console.log('called index')
   console.log(AgentsModel)
   try {
+    console.log('Error here:', await AgentsModel.find({}))
     const agents = await AgentsModel.find({})
-    console.log('Error here:', agents)
+    
     res.send(agents)
   } catch (e) {
     res.send({ success: false, errors: e })
