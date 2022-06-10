@@ -6,6 +6,6 @@ const router = express.Router()
 router.get('/', agentController.index)
 router.post('/', agentController.create)
 router.put('/:id', agentController.update)
-router.delete('/:id', agentController.update)
+router.delete('/:id', agentController.remove)
 
 module.exports = router
