@@ -3,9 +3,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb')
 const mongoose = require('mongoose')
 const app = express()
 const port = process.env.PORT || 3000
-const DB_URI =
-  'mongodb+srv://sistema-gestao-admin:sSSqVcv5lVTLdqSR@sistema-gestao-sp.mo7oxvo.mongodb.net/?retryWrites=true&w=majority'
-
+const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost/sistema-gestao-dev'
 const agentsRoutes = require('./routes/agent_routes')
 
 try {
