@@ -1,4 +1,5 @@
 const express = require('express')
+const { MongoClient, ServerApiVersion } = require('mongodb')
 const mongoose = require('mongoose')
 const app = express()
 const port = process.env.PORT || 3000
@@ -15,15 +16,15 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-mongoose
-  .connect(DB_URI, { useUnifiedTopology: true , useNewUrlParser: true,})
-  .then(() => {
-    console.log('Database connected')
-  })
-  .catch(e => {
-    console.log('Error trying to connect to database')
-    console.log(e)
-  })
+const client = new MongoClient(DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+})
+client.connect()
+mongoose.connection.once('open', () => { console.log('MongoDB Connected'); });
+mongoose.connection.on('error', (err) => { console.log('MongoDB connection error: ', err); }); 
+
 app.listen(port, () => {
   console.log('Listening on port : ', port)
 })
