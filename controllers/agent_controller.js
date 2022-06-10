@@ -1,7 +1,7 @@
 const AgentsModel = require('../models/agent_model')
 console.log('called routes')
 
-/*const index = async (req, res) => {
+const index = async (req, res) => {
   console.log('called index')
   console.log(AgentsModel.db)
   try {
@@ -11,14 +11,14 @@ console.log('called routes')
   } catch (e) {
     res.send({ success: false, errors: e })
   }
-}*/
+}/*
 const index = async (req, res) => {
   console.log('called index')
   console.log(AgentsModel.db)
   
     
     res.send('hellou')
-}
+}*/
 const create = async (req, res) => {
   try {
     const newAgent = await AgentsModel.create({ ...req.body })
