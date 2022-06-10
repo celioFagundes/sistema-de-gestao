@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 const port = process.env.PORT || 3000
-const DB_URI = process.env.MONGODB_URI
+const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost/sis-gestao-dev'
 
 const agentsRoutes = require('./routes/agent_routes')
 
@@ -16,10 +16,14 @@ app.get('/', (req, res) => {
 })
 
 mongoose
-  .connect(DB_URI, { tls: true })
+  .connect(DB_URI, { useUnifiedTopology: true })
   .then(() => {
-    app.listen(port, () => {
-      console.log('Listening on port : ', port)
-    })
+    console.log('Database connected')
   })
-  .catch(e => console.log(e))
+  .catch(e => {
+    console.log('Error trying to connect to database')
+    console.log(e)
+  })
+app.listen(port, () => {
+  console.log('Listening on port : ', port)
+})
