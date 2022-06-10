@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 })
 
 mongoose
-  .connect(DB_URI, { useUnifiedTopology: true })
+  .connect(DB_URI, { useUnifiedTopology: true , useNewUrlParser: true,})
   .then(() => {
     console.log('Database connected')
   })
