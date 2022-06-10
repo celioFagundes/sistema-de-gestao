@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 const port  = process.env.PORT || 3000
-const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost/sis-gestao-dev'
+const DB_URI = process.env.MONGODB_URI
 
 const agentsRoutes = require('./routes/agent_routes')
 
