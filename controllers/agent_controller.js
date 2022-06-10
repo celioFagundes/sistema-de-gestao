@@ -1,10 +1,10 @@
 const AgentsModel = require('../models/agent_model')
 console.log('called routes')
+
 const index = async (req, res) => {
   console.log('called index')
-  console.log(AgentsModel)
+  console.log(AgentsModel.db)
   try {
-    console.log('Error here:', await AgentsModel.find({}))
     const agents = await AgentsModel.find({})
     
     res.send(agents)
