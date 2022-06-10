@@ -5,6 +5,7 @@ const index = async (req, res) => {
   console.log(AgentsModel)
   try {
     const agents = await AgentsModel.find({})
+    console.log(agents)
     res.send(agents)
   } catch (e) {
     res.send({ success: false, errors: e })
