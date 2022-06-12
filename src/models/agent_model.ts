@@ -1,15 +1,17 @@
-const mongoose = require('mongoose')
+import {Schema, model} from 'mongoose'
+import { Agent, Document, Phone } from '../types'
 
-const PhoneSchema = mongoose.Schema({
+
+const PhoneSchema = new Schema<Phone>({
     ddd: String,
     ddi: String,
     number: String
 })
-const DocumentSchema = mongoose.Schema({
+const DocumentSchema = new Schema<Document>({
     type: String,
     number: String
 })
-const AgentSchema = mongoose.Schema({
+const AgentSchema = new Schema<Agent>({
     name: {
         type: String,
         required:true
@@ -28,5 +30,5 @@ const AgentSchema = mongoose.Schema({
     }
 
 })
-const Agents = mongoose.model('Agents', AgentSchema)
-module.exports = Agents
+const Agents = model<Agent>('Agents', AgentSchema)
+export default  Agents
