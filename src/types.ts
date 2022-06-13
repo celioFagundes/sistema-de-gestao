@@ -23,3 +23,7 @@ export interface Agent {
     role: string
     status: Status
 }
+export interface Department{
+    name: string
+    branches: string[]
+}

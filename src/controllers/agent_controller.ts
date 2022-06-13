@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
-import AgentsModel from '../models/agent_model'
+import { Model } from 'mongoose'
 import { Agent } from '../types'
 
-export const findAllAgents = async (req: Request, res: Response) => {
+
+export const findAllAgents = (AgentsModel : Model<Agent, {}, {}, {}>) => async (req: Request, res: Response) => {
   try {
     const agents: Agent[] = await AgentsModel.find({})
     res.send(agents)
@@ -11,7 +12,7 @@ export const findAllAgents = async (req: Request, res: Response) => {
   }
 }
 
-export const createAgent = async (req: Request, res: Response) => {
+export const createAgent = (AgentsModel : Model<Agent, {}, {}, {}>) => async (req: Request, res: Response) => {
   try {
     const newAgent: Agent = await AgentsModel.create({ ...req.body })
     res.send(newAgent)
@@ -19,7 +20,7 @@ export const createAgent = async (req: Request, res: Response) => {
     res.send({ success: false, errors: e })
   }
 } 
-export const updateAgent = async (req: Request, res: Response) => {
+export const updateAgent = (AgentsModel : Model<Agent, {}, {}, {}>) => async (req: Request, res: Response) => {
   try {
     const updateAgent: Agent | null = await AgentsModel.findByIdAndUpdate(
       req.params.id,
@@ -31,7 +32,7 @@ export const updateAgent = async (req: Request, res: Response) => {
     res.send({ success: false, errors: e })
   }
 }
-export const removeAgent = async (req: Request, res: Response) => {
+export const removeAgent = (AgentsModel : Model<Agent, {}, {}, {}>) => async (req: Request, res: Response) => {
   try {
     await AgentsModel.findByIdAndDelete(req.params.id)
     res.send({

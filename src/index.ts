@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import { connect } from 'mongoose'
 import agentsRoutes from './routes/agent_routes'
+import departmentsRoutes from './routes/department_routes'
 
 const app: Express = express()
 
@@ -24,6 +25,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/agents', agentsRoutes)
+app.use('/departments', departmentsRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello world')
