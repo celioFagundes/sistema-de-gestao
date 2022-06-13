@@ -13,7 +13,7 @@ exports.removeDepartment = exports.updateDepartment = exports.createDepartment =
 const findAllDepartments = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const departments = yield DepartmentsModel.find({});
-        res.send(departments);
+        res.send({ success: true, departments });
     }
     catch (e) {
         res.send({ success: false, errors: e });
@@ -23,7 +23,7 @@ exports.findAllDepartments = findAllDepartments;
 const createDepartment = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newDepartment = yield DepartmentsModel.create(Object.assign({}, req.body));
-        res.send(newDepartment);
+        res.send({ success: true, department: newDepartment });
     }
     catch (e) {
         res.send({ success: false, errors: e });
@@ -33,7 +33,7 @@ exports.createDepartment = createDepartment;
 const updateDepartment = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updateDepartment = yield DepartmentsModel.findByIdAndUpdate(req.params.id, Object.assign({}, req.body), { runValidators: true });
-        res.send(updateDepartment);
+        res.send({ success: true, department: updateDepartment });
     }
     catch (e) {
         res.send({ success: false, errors: e });
@@ -44,18 +44,21 @@ const removeDepartment = (DepartmentsModel, AgentsModel) => (req, res) => __awai
     const department = yield DepartmentsModel.findById(req.params.id);
     if (department) {
         const agentsFromDepartment = yield AgentsModel.find({ department: department.name });
-        res.send(agentsFromDepartment);
+        if (agentsFromDepartment.length > 0) {
+            res
+                .status(424)
+                .send({
+                success: false,
+                errors: 'Failed to delete department. There are agents that belongs to this department',
+            });
+        }
+        if (agentsFromDepartment.length === 0) {
+            yield DepartmentsModel.findByIdAndDelete(req.params.id);
+            res.send({ success: true });
+        }
     }
     if (!department) {
-        res.status(404).send('Departamento não encontrado');
+        res.status(404).send({ success: false, errors: 'Departament not found' });
     }
-    /*try {
-      await DepartmentsModel.findByIdAndDelete(req.params.id)
-      res.send({
-        success: true,
-      })
-    } catch (e) {
-      res.send({ success: false, errors: e })
-    }*/
 });
 exports.removeDepartment = removeDepartment;

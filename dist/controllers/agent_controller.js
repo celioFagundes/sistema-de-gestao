@@ -13,7 +13,7 @@ exports.removeAgent = exports.updateAgent = exports.createAgent = exports.findAl
 const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const agents = yield AgentsModel.find({});
-        res.send(agents);
+        res.send({ success: true, agents });
     }
     catch (e) {
         res.send({ success: false, errors: e });
@@ -23,7 +23,7 @@ exports.findAllAgents = findAllAgents;
 const createAgent = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newAgent = yield AgentsModel.create(Object.assign({}, req.body));
-        res.send(newAgent);
+        res.send({ success: true, agent: newAgent });
     }
     catch (e) {
         res.send({ success: false, errors: e });
@@ -33,7 +33,7 @@ exports.createAgent = createAgent;
 const updateAgent = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updateAgent = yield AgentsModel.findByIdAndUpdate(req.params.id, Object.assign({}, req.body), { runValidators: true });
-        res.send(updateAgent);
+        res.send({ success: true, agent: updateAgent });
     }
     catch (e) {
         res.send({ success: false, errors: e });
