@@ -12,6 +12,10 @@ const DepartmentSchema = new Schema<Department>({
     agents_count: {
         type: Number,
         default: 0
+    },
+    roles_count: {
+        type: Number,
+        default: 0
     }
 
 })

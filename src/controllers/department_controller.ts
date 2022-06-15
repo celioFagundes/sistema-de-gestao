@@ -3,7 +3,7 @@ import { Model, Types } from 'mongoose'
 import { Agent, Department } from '../types'
 
 export const findAllDepartments =
-  (DepartmentsModel: Model<Department, {}, {}, {}>) => async (req: Request, res: Response) => {
+  (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
     try {
       const departments: Department[] = await DepartmentsModel.find({})
       res.send({ success: true, departments })
@@ -12,7 +12,7 @@ export const findAllDepartments =
     }
   }
 export const findDepartmentsById =
-  (DepartmentsModel: Model<Department, {}, {}, {}>) => async (req: Request, res: Response) => {
+  (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
     if (!Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
     }
@@ -24,7 +24,7 @@ export const findDepartmentsById =
   }
 
 export const createDepartment =
-  (DepartmentsModel: Model<Department, {}, {}, {}>) => async (req: Request, res: Response) => {
+  (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
     try {
       const newDepartment: Department = await DepartmentsModel.create({ ...req.body })
       res.send({ success: true, department: newDepartment })
@@ -33,7 +33,7 @@ export const createDepartment =
     }
   }
 export const updateDepartment =
-  (DepartmentsModel: Model<Department, {}, {}, {}>) => async (req: Request, res: Response) => {
+  (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
     if (!Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
     }
@@ -48,7 +48,7 @@ export const updateDepartment =
     res.send({ success: true, department: updateDepartment })
   }
 export const updateDepartmentCount =
-  (DepartmentsModel: Model<Department, {}, {}, {}>) => async (req: Request, res: Response) => {
+  (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
     if (!Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
     }
@@ -73,26 +73,23 @@ export const updateDepartmentCount =
     res.send({ success: true, agents_count: department.agents_count })
   }
 export const removeDepartment =
-  (DepartmentsModel: Model<Department, {}, {}, {}>, AgentsModel: Model<Agent, {}, {}, {}>) =>
-  async (req: Request, res: Response) => {
+  (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
     if (!Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
     }
     const department: Department | null = await DepartmentsModel.findById(req.params.id)
-    if (department) {
-      const agentsFromDepartment: Agent[] = await AgentsModel.find({ department: department.name })
-      if (agentsFromDepartment.length > 0) {
-        res.status(424).send({
-          success: false,
-          errors: 'Failed to delete department. There are agents that belongs to this department',
-        })
-      }
-      if (agentsFromDepartment.length === 0) {
-        await DepartmentsModel.findByIdAndDelete(req.params.id)
-        res.send({ success: true })
-      }
-    }
     if (!department) {
-      res.status(404).send({ success: false, errors: 'Department not found' })
+      return res.status(404).send({ success: false, errors: 'Department not found' })
+    }
+
+    if (department.agents_count > 0) {
+      res.status(424).send({
+        success: false,
+        errors: 'Failed to delete department. There are agents that belongs to this department',
+      })
+    }
+    if (department.agents_count === 0) {
+      await DepartmentsModel.findByIdAndDelete(req.params.id)
+      res.send({ success: true })
     }
   }
