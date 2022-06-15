@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeAgent = exports.updateAgent = exports.createAgent = exports.findAllAgents = void 0;
+exports.removeAgent = exports.updateAgent = exports.createAgent = exports.findAgentById = exports.findAllAgents = void 0;
+const mongoose_1 = require("mongoose");
 const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const agents = yield AgentsModel.find({});
@@ -20,6 +21,17 @@ const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, v
     }
 });
 exports.findAllAgents = findAllAgents;
+const findAgentById = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
+    }
+    const agent = yield AgentsModel.findById(req.params.id);
+    if (!agent) {
+        res.status(404).send({ success: false, errors: 'Agent not found' });
+    }
+    res.send({ success: true, agent });
+});
+exports.findAgentById = findAgentById;
 const createAgent = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newAgent = yield AgentsModel.create(Object.assign({}, req.body));
