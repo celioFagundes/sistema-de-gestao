@@ -34,6 +34,28 @@ export const updateDepartment =
       res.send({ success: false, errors: e })
     }
   }
+export const updateDepartmentCount =
+  (DepartmentsModel: Model<Department, {}, {}, {}>) => async (req: Request, res: Response) => {
+    const department: Department | null = await DepartmentsModel.findById(req.params.id)
+    if (!department) {
+      return res.status(404).send({ success: false, errors: 'Department not found' })
+    }
+    if (req.params.operation === 'increment') {
+      department.agents_count++
+    }
+
+    if (req.params.operation === 'decrement') {
+      if(department.agents_count === 0){
+        return res.status(400).send({ success: false, errors: 'Agents count is already 0' })
+      }
+      department.agents_count--
+    }
+    await DepartmentsModel.updateOne(
+      { _id: department._id },
+      { agents_count: department.agents_count }
+    )
+    res.send({ success: true, agents_count: department.agents_count })
+  }
 export const removeDepartment =
   (DepartmentsModel: Model<Department, {}, {}, {}>, AgentsModel: Model<Agent, {}, {}, {}>) =>
   async (req: Request, res: Response) => {
@@ -41,12 +63,10 @@ export const removeDepartment =
     if (department) {
       const agentsFromDepartment: Agent[] = await AgentsModel.find({ department: department.name })
       if (agentsFromDepartment.length > 0) {
-        res
-          .status(424)
-          .send({
-            success: false,
-            errors: 'Failed to delete department. There are agents that belongs to this department',
-          })
+        res.status(424).send({
+          success: false,
+          errors: 'Failed to delete department. There are agents that belongs to this department',
+        })
       }
       if (agentsFromDepartment.length === 0) {
         await DepartmentsModel.findByIdAndDelete(req.params.id)

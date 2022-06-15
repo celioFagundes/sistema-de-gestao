@@ -11,5 +11,6 @@ const router = express_1.default.Router();
 router.get('/', (0, department_controller_1.findAllDepartments)(department_model_1.default));
 router.post('/', (0, department_controller_1.createDepartment)(department_model_1.default));
 router.put('/:id', (0, department_controller_1.updateDepartment)(department_model_1.default));
+router.put('/:id/count/:operation', (0, department_controller_1.updateDepartmentCount)(department_model_1.default));
 router.delete('/:id', (0, department_controller_1.removeDepartment)(department_model_1.default, agent_model_1.default));
 exports.default = router;

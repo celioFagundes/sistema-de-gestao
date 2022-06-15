@@ -9,6 +9,10 @@ const DepartmentSchema = new Schema<Department>({
         required:true
     },
     branches: [String],
+    agents_count: {
+        type: Number,
+        default: 0
+    }
 
 })
 const Departments = model<Department>('Departments', DepartmentSchema)

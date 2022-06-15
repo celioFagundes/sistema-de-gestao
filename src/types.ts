@@ -12,6 +12,7 @@ export enum Status{
     Inactive ='inactive'
 }
 export interface Agent {
+    _id: string
     name: string
     email: string
     phones: Phone
@@ -24,6 +25,8 @@ export interface Agent {
     status: Status
 }
 export interface Department{
+    _id: string
     name: string
     branches: string[]
+    agents_count: number
 }

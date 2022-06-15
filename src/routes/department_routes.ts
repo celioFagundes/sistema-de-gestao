@@ -4,6 +4,7 @@ import {
   createDepartment,
   updateDepartment,
   removeDepartment,
+  updateDepartmentCount,
 } from '../controllers/department_controller'
 
 import DepartmentsModel from '../models/department_model'
@@ -14,6 +15,7 @@ const router: Router = express.Router()
 router.get('/', findAllDepartments(DepartmentsModel))
 router.post('/', createDepartment(DepartmentsModel))
 router.put('/:id', updateDepartment(DepartmentsModel))
+router.put('/:id/count/:operation', updateDepartmentCount(DepartmentsModel))
 router.delete('/:id', removeDepartment(DepartmentsModel, AgentsModel))
 
 export default router
