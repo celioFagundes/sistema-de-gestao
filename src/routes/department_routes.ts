@@ -1,4 +1,4 @@
-import express, { Router } from 'express'
+import  { Router } from 'express'
 import {
   findAllDepartments,
   createDepartment,
@@ -10,7 +10,7 @@ import {
 import DepartmentsModel from '../models/department_model'
 import AgentsModel from '../models/agent_model'
 
-const router: Router = express.Router()
+const router = Router()
 
 router.get('/', findAllDepartments(DepartmentsModel))
 router.post('/', createDepartment(DepartmentsModel))

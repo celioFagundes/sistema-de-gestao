@@ -1,8 +1,8 @@
-import express, {  Router } from 'express'
+import  {  Router } from 'express'
 import { findAllAgents, createAgent, updateAgent, removeAgent, findAgentById } from '../controllers/agent_controller'
 import AgentsModel from '../models/agent_model'
 
-const router: Router = express.Router()
+const router = Router()
 
 router.get('/', findAllAgents(AgentsModel))
 router.post('/', createAgent(AgentsModel) )

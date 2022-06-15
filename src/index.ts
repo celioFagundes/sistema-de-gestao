@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { connect } from 'mongoose'
 import agentsRoutes from './routes/agent_routes'
 import departmentsRoutes from './routes/department_routes'
+import rolesRoutes from './routes/role_routes'
 
 const app: Express = express()
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/agents', agentsRoutes)
 app.use('/departments', departmentsRoutes)
+app.use('/roles', rolesRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello world')

@@ -18,7 +18,7 @@ export const findAgentById =
     }
     const agent: Agent | null = await AgentsModel.findById(req.params.id)
     if (!agent) {
-      res.status(404).send({ success: false, errors: 'Agent not found' })
+      return res.status(404).send({ success: false, errors: 'Agent not found' })
     }
     res.send({ success: true, agent })
   }
@@ -34,19 +34,25 @@ export const createAgent =
   }
 export const updateAgent =
   (AgentsModel: Model<Agent, {}, {}, {}>) => async (req: Request, res: Response) => {
-    try {
-      const updateAgent: Agent | null = await AgentsModel.findByIdAndUpdate(
-        req.params.id,
-        { ...req.body },
-        { runValidators: true }
-      )
-      res.send({ success: true, agent: updateAgent })
-    } catch (e) {
-      res.send({ success: false, errors: e })
+    if (!Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
     }
+    const updateAgent: Agent | null = await AgentsModel.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body },
+      { runValidators: true }
+    )
+    if (!updateAgent) {
+      return res.status(404).send({ success: false, errors: 'Agent not found' })
+    }
+    res.send({ success: true, agent: updateAgent })
   }
 export const removeAgent =
   (AgentsModel: Model<Agent, {}, {}, {}>) => async (req: Request, res: Response) => {
+
+    if (!Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
+    }
     try {
       await AgentsModel.findByIdAndDelete(req.params.id)
       res.send({

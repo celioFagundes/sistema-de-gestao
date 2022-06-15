@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeDepartment = exports.updateDepartmentCount = exports.updateDepartment = exports.createDepartment = exports.findAllDepartments = void 0;
+exports.removeDepartment = exports.updateDepartmentCount = exports.updateDepartment = exports.createDepartment = exports.findDepartmentsById = exports.findAllDepartments = void 0;
+const mongoose_1 = require("mongoose");
 const findAllDepartments = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const departments = yield DepartmentsModel.find({});
@@ -20,6 +21,17 @@ const findAllDepartments = (DepartmentsModel) => (req, res) => __awaiter(void 0,
     }
 });
 exports.findAllDepartments = findAllDepartments;
+const findDepartmentsById = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
+    }
+    const department = yield DepartmentsModel.findById(req.params.id);
+    if (!department) {
+        return res.status(404).send({ success: false, errors: 'Department not found' });
+    }
+    res.send({ success: true, department });
+});
+exports.findDepartmentsById = findDepartmentsById;
 const createDepartment = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newDepartment = yield DepartmentsModel.create(Object.assign({}, req.body));
@@ -31,16 +43,20 @@ const createDepartment = (DepartmentsModel) => (req, res) => __awaiter(void 0, v
 });
 exports.createDepartment = createDepartment;
 const updateDepartment = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const updateDepartment = yield DepartmentsModel.findByIdAndUpdate(req.params.id, Object.assign({}, req.body), { runValidators: true });
-        res.send({ success: true, department: updateDepartment });
+    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
     }
-    catch (e) {
-        res.send({ success: false, errors: e });
+    const updateDepartment = yield DepartmentsModel.findByIdAndUpdate(req.params.id, Object.assign({}, req.body), { runValidators: true });
+    if (!updateDepartment) {
+        return res.status(404).send({ success: false, errors: 'Department not found' });
     }
+    res.send({ success: true, department: updateDepartment });
 });
 exports.updateDepartment = updateDepartment;
 const updateDepartmentCount = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
+    }
     const department = yield DepartmentsModel.findById(req.params.id);
     if (!department) {
         return res.status(404).send({ success: false, errors: 'Department not found' });
@@ -59,6 +75,9 @@ const updateDepartmentCount = (DepartmentsModel) => (req, res) => __awaiter(void
 });
 exports.updateDepartmentCount = updateDepartmentCount;
 const removeDepartment = (DepartmentsModel, AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
+    }
     const department = yield DepartmentsModel.findById(req.params.id);
     if (department) {
         const agentsFromDepartment = yield AgentsModel.find({ department: department.name });
@@ -74,7 +93,7 @@ const removeDepartment = (DepartmentsModel, AgentsModel) => (req, res) => __awai
         }
     }
     if (!department) {
-        res.status(404).send({ success: false, errors: 'Departament not found' });
+        res.status(404).send({ success: false, errors: 'Department not found' });
     }
 });
 exports.removeDepartment = removeDepartment;

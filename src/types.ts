@@ -11,6 +11,11 @@ export enum Status{
     Active ='active',
     Inactive ='inactive'
 }
+export enum Permissions{
+    Read ='read',
+    Write ='write',
+    Delete = 'delete'
+}
 export interface Agent {
     _id: string
     name: string
@@ -29,4 +34,11 @@ export interface Department{
     name: string
     branches: string[]
     agents_count: number
+}
+export interface Role{
+    _id:string
+    name:string
+    department: string
+    agents_count: number
+    permissions: Permissions[]
 }

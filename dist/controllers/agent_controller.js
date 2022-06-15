@@ -27,7 +27,7 @@ const findAgentById = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, v
     }
     const agent = yield AgentsModel.findById(req.params.id);
     if (!agent) {
-        res.status(404).send({ success: false, errors: 'Agent not found' });
+        return res.status(404).send({ success: false, errors: 'Agent not found' });
     }
     res.send({ success: true, agent });
 });
@@ -43,16 +43,20 @@ const createAgent = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, voi
 });
 exports.createAgent = createAgent;
 const updateAgent = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const updateAgent = yield AgentsModel.findByIdAndUpdate(req.params.id, Object.assign({}, req.body), { runValidators: true });
-        res.send({ success: true, agent: updateAgent });
+    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
     }
-    catch (e) {
-        res.send({ success: false, errors: e });
+    const updateAgent = yield AgentsModel.findByIdAndUpdate(req.params.id, Object.assign({}, req.body), { runValidators: true });
+    if (!updateAgent) {
+        return res.status(404).send({ success: false, errors: 'Agent not found' });
     }
+    res.send({ success: true, agent: updateAgent });
 });
 exports.updateAgent = updateAgent;
 const removeAgent = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
+    }
     try {
         yield AgentsModel.findByIdAndDelete(req.params.id);
         res.send({

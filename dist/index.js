@@ -8,6 +8,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = require("mongoose");
 const agent_routes_1 = __importDefault(require("./routes/agent_routes"));
 const department_routes_1 = __importDefault(require("./routes/department_routes"));
+const role_routes_1 = __importDefault(require("./routes/role_routes"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const port = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/agents', agent_routes_1.default);
 app.use('/departments', department_routes_1.default);
+app.use('/roles', role_routes_1.default);
 app.get('/', (req, res) => {
     res.send('Hello world');
 });
