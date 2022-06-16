@@ -33,8 +33,6 @@ export interface Department{
     _id: string
     name: string
     branches: string[]
-    agents_count: number
-    roles_count: number
 }
 export interface Role{
     _id:string

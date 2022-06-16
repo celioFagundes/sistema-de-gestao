@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeDepartment = exports.updateDepartmentCount = exports.updateDepartment = exports.createDepartment = exports.findDepartmentsById = exports.findAllDepartments = void 0;
+exports.removeDepartment = exports.updateDepartment = exports.createDepartment = exports.findDepartmentsById = exports.findAllDepartments = void 0;
 const mongoose_1 = require("mongoose");
 const findAllDepartments = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -53,7 +53,7 @@ const updateDepartment = (DepartmentsModel) => (req, res) => __awaiter(void 0, v
     res.send({ success: true, department: updateDepartment });
 });
 exports.updateDepartment = updateDepartment;
-const updateDepartmentCount = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const removeDepartment = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
     }
@@ -61,39 +61,7 @@ const updateDepartmentCount = (DepartmentsModel) => (req, res) => __awaiter(void
     if (!department) {
         return res.status(404).send({ success: false, errors: 'Department not found' });
     }
-    if (req.params.operation === 'increment') {
-        department.agents_count++;
-    }
-    if (req.params.operation === 'decrement') {
-        if (department.agents_count === 0) {
-            return res.status(400).send({ success: false, errors: 'Agents count is already 0' });
-        }
-        department.agents_count--;
-    }
-    yield DepartmentsModel.updateOne({ _id: department._id }, { agents_count: department.agents_count });
-    res.send({ success: true, agents_count: department.agents_count });
-});
-exports.updateDepartmentCount = updateDepartmentCount;
-const removeDepartment = (DepartmentsModel, AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
-    }
-    const department = yield DepartmentsModel.findById(req.params.id);
-    if (department) {
-        const agentsFromDepartment = yield AgentsModel.find({ department: department.name });
-        if (agentsFromDepartment.length > 0) {
-            res.status(424).send({
-                success: false,
-                errors: 'Failed to delete department. There are agents that belongs to this department',
-            });
-        }
-        if (agentsFromDepartment.length === 0) {
-            yield DepartmentsModel.findByIdAndDelete(req.params.id);
-            res.send({ success: true });
-        }
-    }
-    if (!department) {
-        res.status(404).send({ success: false, errors: 'Department not found' });
-    }
+    yield DepartmentsModel.findByIdAndDelete(req.params.id);
+    res.send({ success: true });
 });
 exports.removeDepartment = removeDepartment;
