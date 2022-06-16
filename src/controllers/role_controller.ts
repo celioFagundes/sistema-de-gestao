@@ -43,26 +43,14 @@ export const updateRole = (RolesModel: Model<Role>) => async (req: Request, res:
   res.send({ success: true, role: updateRole })
 }
 
-export const removeRole =
-  (RolesModel: Model<Role>, AgentsModel: Model<Agent>) => async (req: Request, res: Response) => {
-    if (!Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
-    }
-    const role: Role | null = await RolesModel.findById(req.params.id)
-    if (!role) {
-      res.status(404).send({ success: false, errors: 'Role not found' })
-    }
-    if (role) {
-      const agentsFromRole: Agent[] = await AgentsModel.find({ role: role.name })
-      if (agentsFromRole.length > 0) {
-        res.status(424).send({
-          success: false,
-          errors: 'Failed to delete role. There are agents that belongs to this role',
-        })
-      }
-      if (agentsFromRole.length === 0) {
-        await RolesModel.findByIdAndDelete(req.params.id)
-        res.send({ success: true })
-      }
-    }
+export const removeRole = (RolesModel: Model<Role>) => async (req: Request, res: Response) => {
+  if (!Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
   }
+  const role: Role | null = await RolesModel.findById(req.params.id)
+  if (!role) {
+    res.status(404).send({ success: false, errors: 'Role not found' })
+  }
+  await RolesModel.findByIdAndDelete(req.params.id)
+  res.send({ success: true })
+}

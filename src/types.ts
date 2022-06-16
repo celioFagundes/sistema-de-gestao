@@ -38,6 +38,5 @@ export interface Role{
     _id:string
     name:string
     department: string
-    agents_count: number
     permissions: Permissions[]
 }

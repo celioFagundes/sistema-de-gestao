@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Model, Types } from 'mongoose'
-import { Agent, Department } from '../types'
+import { Department } from '../types'
 
 export const findAllDepartments =
   (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
