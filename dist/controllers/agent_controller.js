@@ -21,7 +21,6 @@ const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, v
         limit: requestLimit,
         sort: { [requestField.toString()]: requestCriteria },
     };
-    console.log(options);
     try {
         const results = yield AgentsModel.paginate({}, options);
         res.send({ success: true, results });

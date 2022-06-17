@@ -12,11 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeRole = exports.updateRole = exports.createRole = exports.findRoleById = exports.findAllRoles = void 0;
 const mongoose_1 = require("mongoose");
 const findAllRoles = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let requestPage = Number(req.query.page);
-    let requestLimit = Number(req.query.limit);
+    let requestPage = Number(req.query.page) || 1;
+    let requestLimit = Number(req.query.limit) || 10;
+    let requestField = req.query.field || "id";
+    let requestCriteria = req.query.criteria || "asc";
     const options = {
-        page: requestPage || 1,
-        limit: requestLimit || 10,
+        page: requestPage,
+        limit: requestLimit,
+        sort: { [requestField.toString()]: requestCriteria },
     };
     try {
         const results = yield RolesModel.paginate({}, options);

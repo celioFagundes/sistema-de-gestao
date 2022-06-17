@@ -4,11 +4,15 @@ import { Role } from '../types'
 
 export const findAllRoles =
   (RolesModel: PaginateModel<Role>) => async (req: Request, res: Response) => {
-    let requestPage = Number(req.query.page)
-    let requestLimit = Number(req.query.limit)
+    let requestPage = Number(req.query.page) || 1
+    let requestLimit = Number(req.query.limit) || 10
+    let requestField = req.query.field || "id"
+    let requestCriteria = req.query.criteria || "asc"
+
     const options = {
-      page: requestPage || 1,
-      limit: requestLimit || 10,
+      page: requestPage,
+      limit: requestLimit,
+      sort: { [requestField.toString()] : requestCriteria },
     }
     try {
       const results: PaginateResult<Role> = await RolesModel.paginate({}, options)
