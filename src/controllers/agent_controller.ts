@@ -4,12 +4,17 @@ import { Agent } from '../types'
 
 export const findAllAgents =
   (AgentsModel: PaginateModel<Agent>) => async (req: Request, res: Response) => {
-    let requestPage = Number(req.query.page)
-    let requestLimit = Number(req.query.limit)
+    let requestPage = Number(req.query.page) || 1
+    let requestLimit = Number(req.query.limit) || 10
+    let requestField = req.query.field || "id"
+    let requestCriteria = req.query.criteria || "asc"
+
     const options = {
-      page: requestPage || 1,
-      limit: requestLimit || 10,
+      page: requestPage,
+      limit: requestLimit,
+      sort: { [requestField.toString()] : requestCriteria },
     }
+    console.log(options)
     try {
       const results: PaginateResult<Agent> = await AgentsModel.paginate({}, options)
       res.send({ success: true, results })
@@ -27,6 +32,14 @@ export const findAgentById = (AgentsModel: Model<Agent>) => async (req: Request,
   }
   res.send({ success: true, agent })
 }
+export const findAgentByName =
+  (AgentsModel: Model<Agent>) => async (req: Request, res: Response) => {
+    const agent: Agent | null = await AgentsModel.findOne({ name: req.params.name })
+    if (!agent) {
+      return res.status(404).send({ success: false, errors: 'Agent not found' })
+    }
+    res.send({ success: true, agent })
+  }
 
 export const createAgent = (AgentsModel: Model<Agent>) => async (req: Request, res: Response) => {
   try {

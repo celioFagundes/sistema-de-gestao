@@ -9,15 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeAgent = exports.updateAgent = exports.createAgent = exports.findAgentById = exports.findAllAgents = void 0;
+exports.removeAgent = exports.updateAgent = exports.createAgent = exports.findAgentByName = exports.findAgentById = exports.findAllAgents = void 0;
 const mongoose_1 = require("mongoose");
 const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let requestPage = Number(req.query.page);
-    let requestLimit = Number(req.query.limit);
+    let requestPage = Number(req.query.page) || 1;
+    let requestLimit = Number(req.query.limit) || 10;
+    let requestField = req.query.field || "id";
+    let requestCriteria = req.query.criteria || "asc";
     const options = {
-        page: requestPage || 1,
-        limit: requestLimit || 10,
+        page: requestPage,
+        limit: requestLimit,
+        sort: { [requestField.toString()]: requestCriteria },
     };
+    console.log(options);
     try {
         const results = yield AgentsModel.paginate({}, options);
         res.send({ success: true, results });
@@ -38,6 +42,14 @@ const findAgentById = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, v
     res.send({ success: true, agent });
 });
 exports.findAgentById = findAgentById;
+const findAgentByName = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const agent = yield AgentsModel.findOne({ name: req.params.name });
+    if (!agent) {
+        return res.status(404).send({ success: false, errors: 'Agent not found' });
+    }
+    res.send({ success: true, agent });
+});
+exports.findAgentByName = findAgentByName;
 const createAgent = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newAgent = yield AgentsModel.create(Object.assign({}, req.body));

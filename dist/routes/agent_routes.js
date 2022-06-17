@@ -12,4 +12,5 @@ router.post('/', (0, agent_controller_1.createAgent)(agent_model_1.default));
 router.get('/:id', (0, agent_controller_1.findAgentById)(agent_model_1.default));
 router.put('/:id', (0, agent_controller_1.updateAgent)(agent_model_1.default));
 router.delete('/:id', (0, agent_controller_1.removeAgent)(agent_model_1.default));
+router.get('/name/:name', (0, agent_controller_1.findAgentByName)(agent_model_1.default));
 exports.default = router;
