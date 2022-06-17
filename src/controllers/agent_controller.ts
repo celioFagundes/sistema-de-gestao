@@ -4,10 +4,11 @@ import { Agent } from '../types'
 
 export const findAllAgents =
   (AgentsModel: PaginateModel<Agent>) => async (req: Request, res: Response) => {
+    let requestPage = Number(req.query.page)
+    let requestLimit = Number(req.query.limit)
     const options = {
-      page: 6,
-      limit: 5,
-
+      page: requestPage || 1,
+      limit: requestLimit || 10,
     }
     try {
       const results: PaginateResult<Agent> = await AgentsModel.paginate({}, options)

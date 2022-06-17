@@ -12,9 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeAgent = exports.updateAgent = exports.createAgent = exports.findAgentById = exports.findAllAgents = void 0;
 const mongoose_1 = require("mongoose");
 const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let requestPage = Number(req.query.page);
+    let requestLimit = Number(req.query.limit);
     const options = {
-        page: 6,
-        limit: 5,
+        page: requestPage || 1,
+        limit: requestLimit || 10,
     };
     try {
         const results = yield AgentsModel.paginate({}, options);
