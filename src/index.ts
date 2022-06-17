@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import { connect } from 'mongoose'
 import agentsRoutes from './routes/agent_routes'
 import departmentsRoutes from './routes/department_routes'
@@ -21,7 +22,9 @@ try {
   console.log('Could not connect to database', DB_NAME)
   console.log(error)
 }
-
+app.use(cors({
+  origin: 'http://localhost:3001'
+}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = require("mongoose");
 const agent_routes_1 = __importDefault(require("./routes/agent_routes"));
 const department_routes_1 = __importDefault(require("./routes/department_routes"));
@@ -21,6 +22,9 @@ catch (error) {
     console.log('Could not connect to database', DB_NAME);
     console.log(error);
 }
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:3001'
+}));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/agents', agent_routes_1.default);
