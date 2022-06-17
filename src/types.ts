@@ -1,9 +1,12 @@
+import { Document } from "mongoose"
+
+
 export interface Phone{
     ddd: string
     ddi: string
     number: string
 }
-export interface Document{
+export interface Identification{
     type: string
     number: string
 }
@@ -16,12 +19,11 @@ export enum Permissions{
     Write ='write',
     Delete = 'delete'
 }
-export interface Agent {
-    _id: string
+export interface Agent extends Document{
     name: string
     email: string
     phones: Phone
-    document: Document
+    identification: Document
     birth_date: Date
     image: string
     department: string
@@ -29,13 +31,11 @@ export interface Agent {
     role: string
     status: Status
 }
-export interface Department{
-    _id: string
+export interface Department extends Document{
     name: string
     branches: string[]
 }
-export interface Role{
-    _id:string
+export interface Role extends Document{
     name:string
     department: string
     permissions: Permissions[]

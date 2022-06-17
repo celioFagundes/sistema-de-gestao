@@ -1,23 +1,24 @@
-import { Schema, model } from 'mongoose'
-import { Agent, Document, Phone, Status } from '../types'
+import { Schema, model,  PaginateModel, Model } from 'mongoose'
+import paginate from 'mongoose-paginate-v2'
+import { Agent, Identification, Phone, Status } from '../types'
 
 const PhoneSchema = new Schema<Phone>({
   ddd: String,
   ddi: String,
   number: String,
 })
-const DocumentSchema = new Schema<Document>({
+const IdentificationSchema = new Schema<Identification>({
   type: String,
   number: String,
 })
-const AgentSchema = new Schema<Agent>({
+const AgentSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
   email: String,
   phones: [PhoneSchema],
-  document: DocumentSchema,
+  identification: IdentificationSchema,
   birth_date: Date,
   image: String,
   department: String,
@@ -28,5 +29,8 @@ const AgentSchema = new Schema<Agent>({
     enum: Status,
   },
 })
-const Agents = model<Agent>('Agents', AgentSchema)
+
+AgentSchema.plugin(paginate)
+
+const Agents = model<Agent, PaginateModel<Agent>>('Agents', AgentSchema)
 export default Agents

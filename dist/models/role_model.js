@@ -8,10 +8,6 @@ const RoleSchema = new mongoose_1.Schema({
         required: true,
     },
     department: String,
-    agents_count: {
-        type: Number,
-        default: 0,
-    },
     permissions: {
         type: [String],
         enum: types_1.Permissions

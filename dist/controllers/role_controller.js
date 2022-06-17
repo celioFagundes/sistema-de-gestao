@@ -53,7 +53,7 @@ const updateRole = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 
     res.send({ success: true, role: updateRole });
 });
 exports.updateRole = updateRole;
-const removeRole = (RolesModel, AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const removeRole = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).send({ success: false, errors: 'Id parameter not valid' });
     }
@@ -61,18 +61,7 @@ const removeRole = (RolesModel, AgentsModel) => (req, res) => __awaiter(void 0, 
     if (!role) {
         res.status(404).send({ success: false, errors: 'Role not found' });
     }
-    if (role) {
-        const agentsFromRole = yield AgentsModel.find({ role: role.name });
-        if (agentsFromRole.length > 0) {
-            res.status(424).send({
-                success: false,
-                errors: 'Failed to delete role. There are agents that belongs to this role',
-            });
-        }
-        if (agentsFromRole.length === 0) {
-            yield RolesModel.findByIdAndDelete(req.params.id);
-            res.send({ success: true });
-        }
-    }
+    yield RolesModel.findByIdAndDelete(req.params.id);
+    res.send({ success: true });
 });
 exports.removeRole = removeRole;

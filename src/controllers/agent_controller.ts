@@ -1,15 +1,21 @@
 import { Request, Response } from 'express'
-import { Model, Types } from 'mongoose'
+import { Model, PaginateModel, PaginateResult, Types } from 'mongoose'
 import { Agent } from '../types'
 
-export const findAllAgents = (AgentsModel: Model<Agent>) => async (req: Request, res: Response) => {
-  try {
-    const agents: Agent[] = await AgentsModel.find({})
-    res.send({ success: true, agents })
-  } catch (e) {
-    res.send({ success: false, errors: e })
+export const findAllAgents =
+  (AgentsModel: PaginateModel<Agent>) => async (req: Request, res: Response) => {
+    const options = {
+      page: 6,
+      limit: 5,
+
+    }
+    try {
+      const results: PaginateResult<Agent> = await AgentsModel.paginate({}, options)
+      res.send({ success: true, results })
+    } catch (e) {
+      res.send({ success: false, errors: e })
+    }
   }
-}
 export const findAgentById = (AgentsModel: Model<Agent>) => async (req: Request, res: Response) => {
   if (!Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).send({ success: false, errors: 'Id parameter not valid' })
