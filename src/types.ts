@@ -37,6 +37,5 @@ export interface Department extends Document{
 }
 export interface Role extends Document{
     name:string
-    department: string
     permissions: Permissions[]
 }

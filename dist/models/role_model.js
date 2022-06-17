@@ -11,7 +11,6 @@ const RoleSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    department: String,
     permissions: {
         type: [String],
         enum: types_1.Permissions,

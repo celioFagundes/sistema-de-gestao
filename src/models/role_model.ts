@@ -7,7 +7,6 @@ const RoleSchema = new Schema<Role>({
     type: String,
     required: true,
   },
-  department: String,
   permissions: {
     type: [String],
     enum: Permissions,
