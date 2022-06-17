@@ -12,9 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeDepartment = exports.updateDepartment = exports.createDepartment = exports.findDepartmentsById = exports.findAllDepartments = void 0;
 const mongoose_1 = require("mongoose");
 const findAllDepartments = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let requestPage = Number(req.query.page);
+    let requestLimit = Number(req.query.limit);
+    const options = {
+        page: requestPage || 1,
+        limit: requestLimit || 10,
+    };
     try {
-        const departments = yield DepartmentsModel.find({});
-        res.send({ success: true, departments });
+        const results = yield DepartmentsModel.paginate({}, options);
+        res.send({ success: true, results });
     }
     catch (e) {
         res.send({ success: false, errors: e });
