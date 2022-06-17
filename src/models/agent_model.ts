@@ -11,7 +11,7 @@ const IdentificationSchema = new Schema<Identification>({
   type: String,
   number: String,
 })
-const AgentSchema = new Schema({
+const AgentSchema = new Schema<Agent>({
   name: {
     type: String,
     required: true,

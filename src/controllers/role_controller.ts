@@ -1,15 +1,22 @@
 import { Request, Response } from 'express'
-import { Model, Types } from 'mongoose'
-import { Agent, Role } from '../types'
+import { Model, PaginateModel, PaginateResult, Types } from 'mongoose'
+import { Role } from '../types'
 
-export const findAllRoles = (RolesModel: Model<Role>) => async (req: Request, res: Response) => {
-  try {
-    const roles: Role[] = await RolesModel.find({})
-    res.send({ success: true, roles })
-  } catch (e) {
-    res.send({ success: false, errors: e })
+export const findAllRoles =
+  (RolesModel: PaginateModel<Role>) => async (req: Request, res: Response) => {
+    let requestPage = Number(req.query.page)
+    let requestLimit = Number(req.query.limit)
+    const options = {
+      page: requestPage || 1,
+      limit: requestLimit || 10,
+    }
+    try {
+      const results: PaginateResult<Role> = await RolesModel.paginate({}, options)
+      res.send({ success: true, results })
+    } catch (e) {
+      res.send({ success: false, errors: e })
+    }
   }
-}
 export const findRoleById = (RolesModel: Model<Role>) => async (req: Request, res: Response) => {
   if (!Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).send({ success: false, errors: 'Id parameter not valid' })

@@ -12,9 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeRole = exports.updateRole = exports.createRole = exports.findRoleById = exports.findAllRoles = void 0;
 const mongoose_1 = require("mongoose");
 const findAllRoles = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let requestPage = Number(req.query.page);
+    let requestLimit = Number(req.query.limit);
+    const options = {
+        page: requestPage || 1,
+        limit: requestLimit || 10,
+    };
     try {
-        const roles = yield RolesModel.find({});
-        res.send({ success: true, roles });
+        const results = yield RolesModel.paginate({}, options);
+        res.send({ success: true, results });
     }
     catch (e) {
         res.send({ success: false, errors: e });

@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, PaginateModel } from 'mongoose'
+import paginate from 'mongoose-paginate-v2'
 import { Permissions, Role } from '../types'
 
 const RoleSchema = new Schema<Role>({
@@ -9,8 +10,10 @@ const RoleSchema = new Schema<Role>({
   department: String,
   permissions: {
     type: [String],
-    enum: Permissions
+    enum: Permissions,
   },
 })
-const Roles = model<Role>('Roles', RoleSchema)
+RoleSchema.plugin(paginate)
+const Roles = model<Role, PaginateModel<Role>>('Roles', RoleSchema)
+
 export default Roles
