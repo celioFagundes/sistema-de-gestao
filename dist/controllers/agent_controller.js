@@ -14,15 +14,21 @@ const mongoose_1 = require("mongoose");
 const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let requestPage = Number(req.query.page) || 1;
     let requestLimit = Number(req.query.limit) || 10;
-    let requestField = req.query.field || "id";
-    let requestCriteria = req.query.criteria || "asc";
+    let requestSortField = req.query.field || 'id';
+    let requestSortCriteria = req.query.criteria || 'asc';
+    let requestSearch = req.query.slug || '';
     const options = {
         page: requestPage,
         limit: requestLimit,
-        sort: { [requestField.toString()]: requestCriteria },
+        sort: { [requestSortField.toString()]: requestSortCriteria },
     };
     try {
-        const results = yield AgentsModel.paginate({}, options);
+        const results = yield AgentsModel.paginate({
+            $or: [
+                { name: { $regex: requestSearch, $options: 'i' } },
+                { "identification.number": { $regex: requestSearch, $options: 'i' } },
+            ],
+        }, options);
         res.send({ success: true, results });
     }
     catch (e) {

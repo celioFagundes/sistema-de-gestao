@@ -6,16 +6,24 @@ export const findAllAgents =
   (AgentsModel: PaginateModel<Agent>) => async (req: Request, res: Response) => {
     let requestPage = Number(req.query.page) || 1
     let requestLimit = Number(req.query.limit) || 10
-    let requestField = req.query.field || "id"
-    let requestCriteria = req.query.criteria || "asc"
-
+    let requestSortField = req.query.field || 'id'
+    let requestSortCriteria = req.query.criteria || 'asc'
+    let requestSearch = req.query.slug|| ''
     const options = {
       page: requestPage,
       limit: requestLimit,
-      sort: { [requestField.toString()] : requestCriteria },
+      sort: { [requestSortField.toString()]: requestSortCriteria },
     }
     try {
-      const results: PaginateResult<Agent> = await AgentsModel.paginate({}, options)
+      const results: PaginateResult<Agent> = await AgentsModel.paginate(
+        {
+          $or: [
+            { name: { $regex: requestSearch, $options: 'i' } },
+            { "identification.number": { $regex: requestSearch, $options: 'i' } },
+          ],
+        },
+        options
+      )
       res.send({ success: true, results })
     } catch (e) {
       res.send({ success: false, errors: e })
