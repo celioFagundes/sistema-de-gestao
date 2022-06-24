@@ -14,7 +14,7 @@ const mongoose_1 = require("mongoose");
 const findAllAgents = (AgentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let requestPage = Number(req.query.page) || 1;
     let requestLimit = Number(req.query.limit) || 10;
-    let requestSortField = req.query.field || 'id';
+    let requestSortField = req.query.field || '_id';
     let requestSortCriteria = req.query.criteria || 'asc';
     let requestSearch = req.query.slug || '';
     const options = {

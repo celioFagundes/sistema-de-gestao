@@ -6,7 +6,7 @@ export const findAllAgents =
   (AgentsModel: PaginateModel<Agent>) => async (req: Request, res: Response) => {
     let requestPage = Number(req.query.page) || 1
     let requestLimit = Number(req.query.limit) || 10
-    let requestSortField = req.query.field || 'id'
+    let requestSortField = req.query.field || '_id'
     let requestSortCriteria = req.query.criteria || 'asc'
     let requestSearch = req.query.slug|| ''
     const options = {
