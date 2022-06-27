@@ -18,7 +18,7 @@ const AgentSchema = new Schema<Agent>({
   },
   email: String,
   phones: [PhoneSchema],
-  identification: IdentificationSchema,
+  identification: [IdentificationSchema],
   birth_date: Date,
   image: String,
   department: String,

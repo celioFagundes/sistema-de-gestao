@@ -22,7 +22,7 @@ const AgentSchema = new mongoose_1.Schema({
     },
     email: String,
     phones: [PhoneSchema],
-    identification: IdentificationSchema,
+    identification: [IdentificationSchema],
     birth_date: Date,
     image: String,
     department: String,

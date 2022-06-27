@@ -22,8 +22,8 @@ export enum Permissions{
 export interface Agent extends Document{
     name: string
     email: string
-    phones: Phone
-    identification: Document
+    phones: Phone[]
+    identification: Identification[]
     birth_date: Date
     image: string
     department: string
