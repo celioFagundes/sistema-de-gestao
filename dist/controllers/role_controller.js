@@ -9,9 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeRole = exports.updateRole = exports.createRole = exports.findRoleById = exports.findAllRoles = void 0;
+exports.removeRole = exports.updateRole = exports.createRole = exports.findRoleById = exports.findAllRolesPaginated = exports.findAllRoles = void 0;
 const mongoose_1 = require("mongoose");
 const findAllRoles = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const results = yield RolesModel.find({});
+        res.send({ success: true, results });
+    }
+    catch (e) {
+        res.send({ success: false, errors: e });
+    }
+});
+exports.findAllRoles = findAllRoles;
+const findAllRolesPaginated = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let requestPage = Number(req.query.page) || 1;
     let requestLimit = Number(req.query.limit) || 10;
     let requestField = req.query.field || "id";
@@ -29,7 +39,7 @@ const findAllRoles = (RolesModel) => (req, res) => __awaiter(void 0, void 0, voi
         res.send({ success: false, errors: e });
     }
 });
-exports.findAllRoles = findAllRoles;
+exports.findAllRolesPaginated = findAllRolesPaginated;
 const findRoleById = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).send({ success: false, errors: 'Id parameter not valid' });

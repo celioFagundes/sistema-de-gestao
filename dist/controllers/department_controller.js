@@ -9,9 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeDepartment = exports.updateDepartment = exports.createDepartment = exports.findDepartmentsById = exports.findAllDepartments = void 0;
+exports.removeDepartment = exports.updateDepartment = exports.createDepartment = exports.findDepartmentsById = exports.findAllDepartmentsPaginated = exports.findAllDepartments = void 0;
 const mongoose_1 = require("mongoose");
 const findAllDepartments = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const results = yield DepartmentsModel.find({});
+        res.send({ success: true, results });
+    }
+    catch (e) {
+        res.send({ success: false, errors: e });
+    }
+});
+exports.findAllDepartments = findAllDepartments;
+const findAllDepartmentsPaginated = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let requestPage = Number(req.query.page) || 1;
     let requestLimit = Number(req.query.limit) || 10;
     let requestField = req.query.field || "id";
@@ -29,7 +39,7 @@ const findAllDepartments = (DepartmentsModel) => (req, res) => __awaiter(void 0,
         res.send({ success: false, errors: e });
     }
 });
-exports.findAllDepartments = findAllDepartments;
+exports.findAllDepartmentsPaginated = findAllDepartmentsPaginated;
 const findDepartmentsById = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!mongoose_1.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).send({ success: false, errors: 'Id parameter not valid' });

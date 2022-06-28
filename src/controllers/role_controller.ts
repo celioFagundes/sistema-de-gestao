@@ -3,6 +3,15 @@ import { Model, PaginateModel, PaginateResult, Types } from 'mongoose'
 import { Role } from '../types'
 
 export const findAllRoles =
+  (RolesModel: Model<Role>) => async (req: Request, res: Response) => {
+    try {
+      const results: Role[] = await RolesModel.find({})
+      res.send({ success: true, results })
+    } catch (e) {
+      res.send({ success: false, errors: e })
+    }
+  }
+export const findAllRolesPaginated =
   (RolesModel: PaginateModel<Role>) => async (req: Request, res: Response) => {
     let requestPage = Number(req.query.page) || 1
     let requestLimit = Number(req.query.limit) || 10

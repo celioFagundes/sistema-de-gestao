@@ -3,6 +3,15 @@ import { Model, PaginateModel, PaginateResult, Types } from 'mongoose'
 import { Department } from '../types'
 
 export const findAllDepartments =
+  (DepartmentsModel: Model<Department>) => async (req: Request, res: Response) => {
+    try {
+      const results: Department[] = await DepartmentsModel.find({})
+      res.send({ success: true, results })
+    } catch (e) {
+      res.send({ success: false, errors: e })
+    }
+  }
+export const findAllDepartmentsPaginated =
   (DepartmentsModel: PaginateModel<Department>) => async (req: Request, res: Response) => {
     let requestPage = Number(req.query.page) || 1
     let requestLimit = Number(req.query.limit) || 10
