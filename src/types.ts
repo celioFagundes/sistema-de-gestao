@@ -19,6 +19,10 @@ export enum Permissions{
     Write ='write',
     Delete = 'delete'
 }
+export interface Permission{
+    area: string
+    enabled: [Permissions]
+}
 export interface Agent extends Document{
     name: string
     email: string
@@ -37,5 +41,6 @@ export interface Department extends Document{
 }
 export interface Role extends Document{
     name:string
-    permissions: Permissions[]
+    department:string
+    permissions: Permission[]
 }

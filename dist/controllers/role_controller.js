@@ -12,8 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeRole = exports.updateRole = exports.createRole = exports.findRoleById = exports.findAllRolesPaginated = exports.findAllRoles = void 0;
 const mongoose_1 = require("mongoose");
 const findAllRoles = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let requestSlug = req.query.slug || '';
+    const options = requestSlug ? { department: requestSlug } : {};
     try {
-        const results = yield RolesModel.find({});
+        const results = yield RolesModel.find(options);
         res.send({ success: true, results });
     }
     catch (e) {
@@ -24,15 +26,18 @@ exports.findAllRoles = findAllRoles;
 const findAllRolesPaginated = (RolesModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let requestPage = Number(req.query.page) || 1;
     let requestLimit = Number(req.query.limit) || 10;
-    let requestField = req.query.field || "id";
-    let requestCriteria = req.query.criteria || "asc";
+    let requestField = req.query.field || 'id';
+    let requestCriteria = req.query.criteria || 'asc';
+    let requestSearch = req.query.slug || '';
     const options = {
         page: requestPage,
         limit: requestLimit,
         sort: { [requestField.toString()]: requestCriteria },
     };
     try {
-        const results = yield RolesModel.paginate({}, options);
+        const results = yield RolesModel.paginate({
+            $or: [{ name: { $regex: requestSearch, $options: 'i' } }],
+        }, options);
         res.send({ success: true, results });
     }
     catch (e) {

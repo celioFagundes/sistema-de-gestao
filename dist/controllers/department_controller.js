@@ -24,15 +24,18 @@ exports.findAllDepartments = findAllDepartments;
 const findAllDepartmentsPaginated = (DepartmentsModel) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let requestPage = Number(req.query.page) || 1;
     let requestLimit = Number(req.query.limit) || 10;
-    let requestField = req.query.field || "id";
-    let requestCriteria = req.query.criteria || "asc";
+    let requestField = req.query.field || 'id';
+    let requestCriteria = req.query.criteria || 'asc';
+    let requestSearch = req.query.slug || '';
     const options = {
         page: requestPage,
         limit: requestLimit,
         sort: { [requestField.toString()]: requestCriteria },
     };
     try {
-        const results = yield DepartmentsModel.paginate({}, options);
+        const results = yield DepartmentsModel.paginate({
+            $or: [{ name: { $regex: requestSearch, $options: 'i' } }],
+        }, options);
         res.send({ success: true, results });
     }
     catch (e) {
