@@ -10,6 +10,7 @@ const router = (0, express_1.Router)();
 router.get('/', (0, department_controller_1.findAllDepartments)(department_model_1.default));
 router.get('/paginated', (0, department_controller_1.findAllDepartmentsPaginated)(department_model_1.default));
 router.post('/', (0, department_controller_1.createDepartment)(department_model_1.default));
+router.get('/:id', (0, department_controller_1.findDepartmentsById)(department_model_1.default));
 router.put('/:id', (0, department_controller_1.updateDepartment)(department_model_1.default));
 router.delete('/:id', (0, department_controller_1.removeDepartment)(department_model_1.default));
 exports.default = router;
