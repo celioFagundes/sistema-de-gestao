@@ -13,8 +13,8 @@ const role_routes_1 = __importDefault(require("./routes/role_routes"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const port = process.env.PORT || 3000;
-const DB_URI = process.env.MONGODB_URI_LOCAL;
-const DB_NAME = process.env.DB_NAME_LOCAL;
+const DB_URI = process.env.MONGODB_URI;
+const DB_NAME = process.env.DB_NAME;
 try {
     (0, mongoose_1.connect)(`${DB_URI}`, { dbName: DB_NAME }, () => console.log('Success connecting to database', DB_NAME));
 }

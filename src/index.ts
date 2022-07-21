@@ -11,8 +11,8 @@ const app: Express = express()
 dotenv.config()
 
 const port = process.env.PORT || 3000
-const DB_URI = process.env.MONGODB_URI_LOCAL
-const DB_NAME = process.env.DB_NAME_LOCAL
+const DB_URI = process.env.MONGODB_URI
+const DB_NAME = process.env.DB_NAME
 
 try {
   connect(`${DB_URI}`, { dbName: DB_NAME }, () =>
